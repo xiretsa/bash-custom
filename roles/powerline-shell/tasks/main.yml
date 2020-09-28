@@ -1,7 +1,23 @@
 ---
+- name: Clone powerline font repository
+  git:
+    repo: "https://github.com/powerline/fonts"
+    dest: /tmp/checkout
+
+- name: Launch install of fonts
+  command: "./install.sh"
+  args:
+    chdir: /tmp/checkout/fonts
+
+- name: delete repository
+  file:
+    path: /tmp/checkout
+    state: absent
+
 - name: Install powerline-shell with pip
   pip:
     name: powerline-shell
+    extra_args: --user
 
 - name: update bashrc
   blockinfile:
