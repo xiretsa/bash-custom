@@ -1,0 +1,4 @@
+- hosts: all
+  roles:
+    - powerline-shell
+  tags: do_powerline-shell

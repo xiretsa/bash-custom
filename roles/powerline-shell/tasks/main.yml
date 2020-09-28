@@ -1,0 +1,26 @@
+---
+- name: Install powerline-shell with pip
+  pip:
+    name: powerline-shell
+
+- name: update bashrc
+  blockinfile:
+    path: "{{ ansible_env['HOME'] }}/.bashrc"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK powerline-shell"
+    block: |
+      function _update_ps1() {
+        PS1=$(powerline-shell $?)
+      }
+      if [[ $TERM != linux && ! $PROMPT_COMMAND =~ _update_ps1 ]]; then
+        PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
+      fi
+
+- name: create configuration folder
+  file:
+    path: "{{ ansible_env['HOME'] }}/.config/powerline-shell/"
+    state: directory
+
+- name: copy configuration
+  copy:
+    src: powerline-shell.json
+    dest: "{{ ansible_env['HOME'] }}/.config/powerline-shell/config.json"
